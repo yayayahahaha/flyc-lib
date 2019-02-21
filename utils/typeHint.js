@@ -84,7 +84,12 @@ function singleTypeMap(value, type) {
             }
             break;
         default:
-            console.warn('第二個參數 type 如果是字串，值僅可為' + typeList.join(', ') + ', 目前的值為' + type + ', 將回傳false');
-            return false;
+            console.warn('第二個參數 type 值僅可為' + typeList.join(', ') + ', 目前的值為' + type + ', 將回傳失敗訊息');
+            return {
+                status: 0,
+                message: '第二個參數 type 值僅可為' + typeList.join(', ') + ', 目前的值為' + type + ', 將回傳失敗訊息'
+            };
     }
 }
+
+singleTypeMap('value', 'hello')
