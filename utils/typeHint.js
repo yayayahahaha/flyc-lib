@@ -36,6 +36,7 @@ function typeHint(value, acceptTypes) {
         objectErrorMessage = '',
         showType = typeof value;
 
+    // 如果傳入的acceptTypes 是字串的話，代表使用者只想判斷型別
     if (typeof acceptTypes === 'string') {
         switch (acceptTypes) {
             case 'string':
@@ -95,7 +96,10 @@ function typeHint(value, acceptTypes) {
                 return false;
         }
         return value;
+
+    // 如果acceptType 是陣列的話，代表使用者的這個直可接受複數的型態
     } else if (typeof acceptTypes === 'object' && acceptTypes instanceof Array) {
+
 
     } else {
         if (acceptTypes === null) {
