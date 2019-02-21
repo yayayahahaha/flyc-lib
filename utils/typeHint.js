@@ -102,6 +102,8 @@ function typeHint(value, acceptTypes) {
         /*
                 {
                     value: '',
+                    type: '',
+
                     required: false,
                     errorMessage: ''
                 }
@@ -109,18 +111,34 @@ function typeHint(value, acceptTypes) {
         var isArray = acceptTypes instanceof Array;
         if (isArray) {
 
+        } else {
+            _optionsObjectDetect(acceptTypes);
         }
-
-        _optionsObjectDetect(acceptTypes);
 
         function _optionsObjectDetect(option) {
             var keys = Object.keys(option),
                 keysNeeded = ['value', 'type'],
                 keysOptional = ['required', 'errorMessage'],
                 allKeys = keysNeeded.concat(keysOptional),
+                lackRequiredKeys = _findLackRequiredKeys(option, keysNeeded);
                 redundantKeys = _findRedundantKeys(option, allKeys);
 
-            console.log(redundantKeys);
+
+            // 缺少的必要key
+            if (lackRequiredKeys.length !== 0) {
+                console.log('缺少的必填key: ' + lackRequiredKeys.join(', '));
+            }
+
+            // 多餘的key
+            if (redundantKeys.length !== 0) {
+                console.log('無法識別的key: ' + redundantKeys.join(', '));
+            }
+        }
+
+        function _findLackRequiredKeys(object, keys) {
+            return keys.filter(function(key) {
+                return !(key in object);
+            });
         }
         function _findRedundantKeys(object, keys) {
             return Object.keys(object).filter(function(key) {
@@ -144,10 +162,11 @@ function typeHint(value, acceptTypes) {
 }
 
 var result = typeHint('[]', {
-    value: 123,
-    type: 123,
+    // value: 123,
+    // type: 123,
     required: 123,
     errorMessage: 'hello',
-    hello: 123
+    hello: 123,
+    ttt: 123
 });
 console.log(result);
