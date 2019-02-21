@@ -25,7 +25,7 @@ function typeHint(value, acceptTypes) {
     var acceptTypesArray = [];
 
     if (typeof acceptTypes === 'string') {
-        switch (acceptTypes) {
+        switch (typeof value) {
             case 'string':
             case 'number':
             case 'boolean':
