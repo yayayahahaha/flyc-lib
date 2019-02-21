@@ -112,7 +112,55 @@ function typeHint(value, acceptTypes) {
         if (isArray) {
 
         } else {
-            _optionsObjectDetect(acceptTypes);
+            // _optionsObjectDetect(acceptTypes);
+            _objectKeysDetect({
+                hello: 'hello'
+            }, ['hello', {
+                keyName: '',
+            }]);
+        }
+
+        function _objectKeysDetect(object, limitKeys) {
+            limitKeys = (function() {
+                if (typeof limitKeys === 'object' && limitKeys instanceof Array) {
+                    return limitKeys;
+                } else {
+                    console.log('第二個參數limitKeys 只能是陣列, 將使用空陣列');
+                    return [];
+                }
+            })();
+
+            limitKeys.forEach(function(limitKey) {
+                var limitKeyType = typeof limitKey;
+                switch (limitKeyType) {
+                    case 'string':
+                        // 當作key 全是required 的
+                        if (/^\d+$/.test(limitKey)) {
+                            console.log('limitKey 避免使用數字字串作為key 值: ' + limitKey);
+                        } else if (limitKey === '') {
+                            console.log('limitKey 避免使用空字串作為key 值: ' + limitKey);
+                        } else if (!(limitKey in object)) {
+                            console.log('缺少key: ' + limitKey);
+                        }
+
+                        break;
+                    case 'object':
+                        // keyName 是required 的
+                        if (!('keyName' in limitKey)) {
+                            console.log('物件limitKey 缺少keyName');
+                        } else if (typeof limitKey.keyName !== 'string') {
+                            console.log('物件limitKey 的keyName 僅能為字串格式: ' + typeof limitKey.keyName);
+                        } else if (/^\d+$/.test(limitKey.keyName)) {
+                            console.log('避免使用數字字串作為物件limitKey 的keyName: ' + limitKey.keyName);
+                        } else if (limitKey.keyName === '') {
+                            console.log('避免使用空字串作為物件limitKey 的keyName: ' + limitKey.keyName);
+                        }
+                        break;
+                    default:
+                        console.log('limitKey 型別只能為string 或 { value, required } 的物件');
+                        break;
+                }
+            })
         }
 
         function _optionsObjectDetect(option) {
@@ -121,7 +169,7 @@ function typeHint(value, acceptTypes) {
                 keysOptional = ['required', 'errorMessage'],
                 allKeys = keysNeeded.concat(keysOptional),
                 lackRequiredKeys = _findLackRequiredKeys(option, keysNeeded);
-                redundantKeys = _findRedundantKeys(option, allKeys);
+            redundantKeys = _findRedundantKeys(option, allKeys);
 
 
             // 缺少的必要key
@@ -140,6 +188,7 @@ function typeHint(value, acceptTypes) {
                 return !(key in object);
             });
         }
+
         function _findRedundantKeys(object, keys) {
             return Object.keys(object).filter(function(key) {
                 return keys.indexOf(key) === -1;
