@@ -1,29 +1,30 @@
 /*
+    string
+    number
+    boolean
+    object
+    function
+    array
+    undefined
 
-string
-number
-boolean
-object
-function
-array
-undefined
+    null
 
-null
-
-Date
-RegExp
-Error
+    Date
+    RegExp
+    Error
 */
 
 var typeList = ['string',
-    'number',
-    'boolean',
-    'function',
-    'undefined',
-    'null',
-    'object',
-    'array'
-];
+        'number',
+        'boolean',
+        'function',
+        'undefined',
+        'null',
+        'object',
+        'array'
+    ],
+    showType = '',
+    errorMessage = '';
 
 function singleTypeMap(value, type) {
     if (typeof type !== 'string') {
@@ -39,49 +40,58 @@ function singleTypeMap(value, type) {
         case 'function':
         case 'undefined':
             if (typeof value !== type) {
-                console.warn(_create_errorMessage(type, typeof value));
-                return false;
+                // 錯誤訊息
+                showType = typeof value;
+                errorMessage = 'something error message';
+                return {
+                    status: 0,
+                    message: errorMessage
+                };
             }
             break;
 
         case 'null':
         case 'object':
         case 'array':
-            if (typeof value !== 'object') {
-                objectErrorMessage = _create_errorMessage(type, showType);
-            } else {
+            if (typeof value !== 'object') {} else {
                 switch (type) {
                     case 'null':
                         if (value) {
+                            // 錯誤訊息
                             showType = value instanceof Array ? 'array' : 'object';
-                            objectErrorMessage = _create_errorMessage(type, showType);
+                            errorMessage = 'something error message';
                         }
                         break;
                     case 'object':
                         if (!value) {
+                            // 錯誤訊息
                             showType = 'null';
-                            objectErrorMessage = _create_errorMessage(type, showType);
+                            errorMessage = 'something error message';
                         } else if (value instanceof Array) {
+                            // 錯誤訊息
                             showType = 'array';
-                            objectErrorMessage = _create_errorMessage(type, showType);
+                            errorMessage = 'something error message';
                         }
                         break;
                     case 'array':
                         if (!value) {
+                            // 錯誤訊息
                             showType = 'null';
-                            objectErrorMessage = _create_errorMessage(type, showType);
+                            errorMessage = 'something error message';
                         } else if (!(value instanceof Array)) {
+                            // 錯誤訊息
                             showType = 'object';
-                            objectErrorMessage = _create_errorMessage(type, showType);
+                            errorMessage = 'something error message';
                         }
                         break;
                 }
             }
 
-            if (objectErrorMessage) {
-                objectErrorMessage += '\n沒有設定預設值，將回傳false';
-                console.log(objectErrorMessage);
-                return false;
+            if (errorMessage) {
+                return {
+                    status: 0,
+                    message: errorMessage
+                };
             }
             break;
         default:
@@ -92,5 +102,5 @@ function singleTypeMap(value, type) {
     }
 }
 
-var result = singleTypeMap('value', 'string');
+var result = singleTypeMap('value', 'number');
 console.log(result);
