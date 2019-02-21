@@ -91,7 +91,7 @@ function typeHint(value, acceptTypes) {
                 }
                 break;
             default:
-                console.warn('第二個參數 acceptTypes 僅可為' + typeList.join(', ') + ', 將回傳false');
+                console.warn('第二個參數 acceptTypes 僅可為' + typeList.join(', ') + ', 目前的值為' + acceptTypes + ', 將回傳false');
                 return false;
         }
         return value;
@@ -112,5 +112,5 @@ function typeHint(value, acceptTypes) {
     }
 }
 
-var result = typeHint([], 'st');
+var result = typeHint('[]', 'string');
 console.log(result);
