@@ -83,6 +83,7 @@ function typeHint(value, acceptTypes) {
             default:
                 break;
         }
+        return value;
     }
 
     function _create_errorMessage(acceptTypes, showType) {
@@ -90,5 +91,5 @@ function typeHint(value, acceptTypes) {
     }
 }
 
-var result = typeHint({}, 'object');
+var result = typeHint([], 'object');
 console.log(result);
