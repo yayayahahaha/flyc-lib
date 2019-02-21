@@ -99,8 +99,34 @@ function typeHint(value, acceptTypes) {
 
     } else if (typeof acceptTypes === 'object' && acceptTypes) {
         // 如果acceptType 是陣列或物件的話，代表使用者的這個值可接受複數的型態、或想額外設定其他的參數
+        /*
+                {
+                    value: '',
+                    required: false,
+                    errorMessage: ''
+                }
+        */
+        var isArray = acceptTypes instanceof Array;
+        if (isArray) {
 
+        }
 
+        _optionsObjectDetect(acceptTypes);
+
+        function _optionsObjectDetect(option) {
+            var keys = Object.keys(option),
+                keysNeeded = ['value', 'type'],
+                keysOptional = ['required', 'errorMessage'],
+                allKeys = keysNeeded.concat(keysOptional),
+                redundantKeys = _findRedundantKeys(option, allKeys);
+
+            console.log(redundantKeys);
+        }
+        function _findRedundantKeys(object, keys) {
+            return Object.keys(object).filter(function(key) {
+                return keys.indexOf(key) === -1;
+            });
+        }
 
     } else {
         if (acceptTypes === null) {
@@ -117,5 +143,11 @@ function typeHint(value, acceptTypes) {
     }
 }
 
-var result = typeHint('[]', '123');
+var result = typeHint('[]', {
+    value: 123,
+    type: 123,
+    required: 123,
+    errorMessage: 'hello',
+    hello: 123
+});
 console.log(result);
