@@ -220,6 +220,7 @@ function TaskSystem(
 
             console.log(`要執行的任務共有 ${ this.jobsArray.length } 個`);
             console.log(`分給 ${ this.taskNumber } 個task 去執行`);
+            console.log(`每個task 約負責 ${ Math.ceil(this.jobsArray.length / this.taskNumber) } 項任務`);
             this.workingTasksNumber = this.taskNumber;
             for (var i = 0; i < this.taskNumber; i++) {
                 this._doJobs(resolve);
