@@ -117,6 +117,7 @@ function typeHint(value, acceptTypes) {
                 hello: 'hello'
             }, ['hello', {
                 keyName: '',
+                type: 123
             }]);
         }
 
@@ -155,6 +156,25 @@ function typeHint(value, acceptTypes) {
                         } else if (limitKey.keyName === '') {
                             console.log('避免使用空字串作為物件limitKey 的keyName: ' + limitKey.keyName);
                         }
+
+                        if ('type' in limitKey) {
+                            switch (limitKey.type) {
+                                case 'string':
+                                case 'number':
+                                case 'boolean':
+                                case 'function':
+                                case 'undefined':
+                                case 'null':
+                                case 'object':
+                                case 'array':
+                                    break;
+                                default:
+                                    console.log('物件limitKey 的type 僅可為' + typeList.join(', ') + ', 將不使用: ' + limitKey.type);
+                                    delete limitKey.type;
+                                    break;
+                            }
+                        }
+
                         break;
                     default:
                         console.log('limitKey 型別只能為string 或 { value, required } 的物件');
