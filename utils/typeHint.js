@@ -92,13 +92,13 @@ function typeHint(value, acceptTypes) {
                 }
                 break;
             default:
-                console.warn('第二個參數 acceptTypes 僅可為' + typeList.join(', ') + ', 目前的值為' + acceptTypes + ', 將回傳false');
+                console.warn('第二個參數 acceptTypes 如果是字串，值僅可為' + typeList.join(', ') + ', 目前的值為' + acceptTypes + ', 將回傳false');
                 return false;
         }
         return value;
 
-    } else if (typeof acceptTypes === 'object' && acceptTypes instanceof Array) {
-        // 如果acceptType 是陣列的話，代表使用者的這個直可接受複數的型態
+    } else if (typeof acceptTypes === 'object' && acceptTypes) {
+        // 如果acceptType 是陣列或物件的話，代表使用者的這個值可接受複數的型態、或想額外設定其他的參數
 
 
 
@@ -108,7 +108,7 @@ function typeHint(value, acceptTypes) {
         } else {
             showType = typeof acceptTypes;
         }
-        console.warn('第二個參數 acceptTypes 僅可為字串或array, 傳入的值為' + showType);
+        console.warn('第二個參數 acceptTypes 的型別僅可為字串、物件或陣列, 傳入的值為' + showType);
         return;
     }
 
@@ -117,5 +117,5 @@ function typeHint(value, acceptTypes) {
     }
 }
 
-var result = typeHint('[]', 'string');
+var result = typeHint('[]', '123');
 console.log(result);
