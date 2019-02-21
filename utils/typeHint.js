@@ -32,7 +32,7 @@ function typeHint(value, acceptTypes) {
             case 'function':
             case 'undefined':
                 if (typeof value !== acceptTypes) {
-                    console.warn('型別錯誤: 想要的型別為 ' + acceptTypes + ' , 傳入的值的型別為' + typeof value);
+                    console.warn(_create_errorMessage(acceptTypes, typeof value));
                     console.warn('沒有設定預設值，將回傳false');
                     return false;
                 }
@@ -44,31 +44,31 @@ function typeHint(value, acceptTypes) {
                 var objectErrorMessage = '',
                     showType = typeof value;
                 if (typeof value !== 'object') {
-                    objectErrorMessage = '型別錯誤: 想要的型別為 ' + acceptTypes + ' , 傳入的值的型別為' + showType;
+                    objectErrorMessage = _create_errorMessage(acceptTypes, showType);
                 } else {
                     switch (acceptTypes) {
                         case 'null':
                             if (value) {
                                 showType = value instanceof Array ? 'array' : 'object';
-                                objectErrorMessage = '型別錯誤: 想要的型別為 ' + acceptTypes + ' , 傳入的值的型別為' + showType;
+                                objectErrorMessage = _create_errorMessage(acceptTypes, showType);
                             }
                             break;
                         case 'object':
                             if (!value) {
                                 showType = 'null';
-                                objectErrorMessage = '型別錯誤: 想要的型別為 ' + acceptTypes + ' , 傳入的值的型別為' + showType;
+                                objectErrorMessage = _create_errorMessage(acceptTypes, showType);
                             } else if (value instanceof Array) {
                                 showType = 'array';
-                                objectErrorMessage = '型別錯誤: 想要的型別為 ' + acceptTypes + ' , 傳入的值的型別為' + showType;
+                                objectErrorMessage = _create_errorMessage(acceptTypes, showType);
                             }
                             break;
                         case 'array':
                             if (!value) {
                                 showType = 'null';
-                                objectErrorMessage = '型別錯誤: 想要的型別為 ' + acceptTypes + ' , 傳入的值的型別為' + showType;
+                                objectErrorMessage = _create_errorMessage(acceptTypes, showType);
                             } else if (!(value instanceof Array)) {
                                 showType = 'object';
-                                objectErrorMessage = '型別錯誤: 想要的型別為 ' + acceptTypes + ' , 傳入的值的型別為' + showType;
+                                objectErrorMessage = _create_errorMessage(acceptTypes, showType);
                             }
                             break;
                     }
@@ -84,7 +84,11 @@ function typeHint(value, acceptTypes) {
                 break;
         }
     }
+
+    function _create_errorMessage(acceptTypes, showType) {
+        return '型別錯誤: 想要的型別為 ' + acceptTypes + ' , 傳入的值的型別為' + showType;
+    }
 }
 
-var result = typeHint([], 'array');
+var result = typeHint({}, 'object');
 console.log(result);
