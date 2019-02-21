@@ -17,12 +17,24 @@ Error
 
 function typeHint(value, acceptTypes) {
     var argumentsLength = arguments.length;
+
     if (argumentsLength < 2) {
         console.log('請至少輸入兩個參數: 第一個為欲被檢查的值，第二個為可接受的型態');
         return;
     }
 
-    var acceptTypesArray = [];
+    var typeList = ['string',
+            'number',
+            'boolean',
+            'function',
+            'undefined',
+            'null',
+            'object',
+            'array'
+        ],
+        acceptTypesArray = [],
+        objectErrorMessage = '',
+        showType = typeof value;
 
     if (typeof acceptTypes === 'string') {
         switch (acceptTypes) {
@@ -41,8 +53,6 @@ function typeHint(value, acceptTypes) {
             case 'null':
             case 'object':
             case 'array':
-                var objectErrorMessage = '',
-                    showType = typeof value;
                 if (typeof value !== 'object') {
                     objectErrorMessage = _create_errorMessage(acceptTypes, showType);
                 } else {
@@ -81,9 +91,20 @@ function typeHint(value, acceptTypes) {
                 }
                 break;
             default:
-                break;
+                console.warn('第二個參數 acceptTypes 僅可為' + typeList.join(', ') + ', 將回傳false');
+                return false;
         }
         return value;
+    } else if (typeof acceptTypes === 'object' && acceptTypes instanceof Array) {
+
+    } else {
+        if (acceptTypes === null) {
+            showType = 'null';
+        } else {
+            showType = typeof acceptTypes;
+        }
+        console.warn('第二個參數 acceptTypes 僅可為字串或array, 傳入的值為' + showType);
+        return;
     }
 
     function _create_errorMessage(acceptTypes, showType) {
@@ -91,5 +112,5 @@ function typeHint(value, acceptTypes) {
     }
 }
 
-var result = typeHint([], 'object');
+var result = typeHint([], 'st');
 console.log(result);
