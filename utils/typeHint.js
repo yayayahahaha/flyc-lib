@@ -27,9 +27,10 @@ var typeList = ['string',
 
 function singleTypeMap(value, type) {
     if (typeof type !== 'string') {
-        // console.log('type 僅能接受字串格式: ' + typeList.join(', '));
-        console.log('type 僅能接受字串格式: ' + typeof type);
-        return;
+        return {
+            status: 0,
+            message: 'type 僅能接受字串格式: ' + typeof type
+        };
     }
     switch (type) {
         case 'string':
@@ -84,7 +85,6 @@ function singleTypeMap(value, type) {
             }
             break;
         default:
-            console.warn('第二個參數 type 值僅可為' + typeList.join(', ') + ', 目前的值為' + type + ', 將回傳失敗訊息');
             return {
                 status: 0,
                 message: '第二個參數 type 值僅可為' + typeList.join(', ') + ', 目前的值為' + type + ', 將回傳失敗訊息'
@@ -92,4 +92,5 @@ function singleTypeMap(value, type) {
     }
 }
 
-singleTypeMap('value', 'hello')
+var result = singleTypeMap('value', 'string');
+console.log(result);
