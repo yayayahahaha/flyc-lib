@@ -22,9 +22,7 @@ var typeList = ['string',
         'null',
         'object',
         'array'
-    ],
-    showType = '',
-    errorMessage = '';
+    ];
 
 // 傳入的參數可接受多種type
 function multipleTypeMap(value, types) {
@@ -33,17 +31,17 @@ function multipleTypeMap(value, types) {
         return;
     }
 
-    var resultsArray = [];
-    types.reduce(function(resultsArray, acceptType) {
-        resultsArray.push(singleTypeMap(value, acceptType));
-        return resultsArray;
-    }, resultsArray);
-    console.log(resultsArray);
+    [].forEach.call(types, function(item, index) {
+        console.log(item);
+        console.log(singleTypeMap(value, item));
+    });
 
 }
 
 // 傳入的參數僅可接受一種type
 function singleTypeMap(value, type) {
+    var showType = '',
+        errorMessage = '';
     if (typeof type !== 'string') {
         return {
             status: 0,
@@ -140,5 +138,5 @@ function singleTypeMap(value, type) {
     }
 }
 
-var result = multipleTypeMap({}, ['array', 'array', 'string', 'object']);
+var result = multipleTypeMap({}, ['string', 'array', 'array', 'object']);
 console.log(result);
