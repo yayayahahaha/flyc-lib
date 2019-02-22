@@ -52,17 +52,19 @@ function objectKeyDetect(object, setting) {
     setting = singleTypeMap(setting, 'object').status ? setting : {};
     var requiredArray = singleTypeMap(setting.required, 'array').status ? setting.required : [],
         optionalArray = singleTypeMap(setting.optional, 'array').status ? setting.optional : [],
-        allNeededArray = [].concat(requiredArray).concat(optionalArray);
+        allNeededArray = [].concat(requiredArray).concat(optionalArray),
+        alertArray = allNeededArray.reduce(function(alertArray, key) {
+            if (typeof key !== 'string') {
+                alertArray.push('請使用字串作為物件的key ' + typeofValue(key));
+            } else if (numberRegex.test(key)) {
+                alertArray.push('避免使用數字字串作為物件的key ' + key);
+            } else if (key === '') {
+                alertArray.push('避免使用空字串作為物件的key ' + key);
+            }
+            return alertArray;
+        }, []);
 
-    allNeededArray.forEach(function(key) {
-        if (typeof key !== 'string') {
-            console.log('警告: 請使用字串作為物件的key ' + typeofValue(key));
-        } else if (numberRegex.test(key)) {
-            console.log('警告: 避免使用數字字串作為物件的key ' + key);
-        } else if (key === '') {
-            console.log('警告: 避免使用空字串作為物件的key ' + key);
-        }
-    });
+    console.log(alertArray);
 
     // redundant, lack
     // required, optional
