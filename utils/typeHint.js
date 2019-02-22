@@ -45,7 +45,8 @@ function singleTypeMap(value, type) {
     if (typeof type !== 'string') {
         return {
             status: 0,
-            message: 'type 僅能接受字串格式: ' + typeof type
+            message: 'type 僅能接受字串格式: ' + typeof type,
+            meta: {}
         };
     }
     switch (type) {
@@ -69,7 +70,11 @@ function singleTypeMap(value, type) {
                 errorMessage = _createErrorMessage(type, showType);
                 return {
                     status: 0,
-                    message: errorMessage
+                    message: errorMessage,
+                    meta: {
+                        value: value,
+                        type: type
+                    }
                 };
             }
             break;
@@ -118,25 +123,37 @@ function singleTypeMap(value, type) {
             if (errorMessage) {
                 return {
                     status: 0,
-                    message: errorMessage
+                    message: errorMessage,
+                    meta: {
+                        value: value,
+                        type: type
+                    }
                 };
             }
             break;
         default:
             return {
                 status: 0,
-                message: '第二個參數 type 值僅可為' + typeList.join(', ') + ', 目前的值為' + type + ', 將回傳失敗訊息'
+                message: '第二個參數 type 值僅可為' + typeList.join(', ') + ', 目前的值為' + type + ', 將回傳失敗訊息',
+                meta: {
+                    value: value,
+                    type: type
+                }
             };
     }
 
     return {
         status: 1,
-        message: 'success'
+        message: 'success',
+        meta: {
+            value: value,
+            type: type
+        }
     }
     function _createErrorMessage(acceptType, getType) {
         return '格式錯誤，希望的格式是' + acceptType + ', 傳入的是' + getType;
     }
 }
 
-var result = multipleTypeMap({}, ['string', 'array', 'array', 'object']);
+var result = multipleTypeMap('123', ['string', 'array', 'array', 'object']);
 console.log(result);
