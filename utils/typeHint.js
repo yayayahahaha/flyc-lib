@@ -50,7 +50,8 @@ function typeDetectWithDefaultValue(value, types) {
 // object 的物件key 值檢測
 function objectKeyDetect(object, setting) {
     setting = singleTypeMap(setting, 'object').status ? setting : {};
-    var requiredArray = singleTypeMap(setting.required, 'array').status ? setting.required : [],
+    var objectKeys = Object.keys(object),
+        requiredArray = singleTypeMap(setting.required, 'array').status ? setting.required : [],
         optionalArray = singleTypeMap(setting.optional, 'array').status ? setting.optional : [],
         allNeededArray = [].concat(requiredArray).concat(optionalArray),
         alertArray = allNeededArray.reduce(function(alertArray, key) {
@@ -62,9 +63,17 @@ function objectKeyDetect(object, setting) {
                 alertArray.push('避免使用空字串作為物件的key ' + key);
             }
             return alertArray;
-        }, []);
+        }, []),
+        redundantArray = allNeededArray.reduce(function(leftKeys, keyNeeded) {
+            var keyNeededIndex = leftKeys.indexOf(keyNeeded);
+            if (keyNeededIndex !== -1) {
+                leftKeys.splice(keyNeededIndex, 1);
+            }
+            return leftKeys;
+        }, objectKeys.slice());
 
     console.log(alertArray);
+    console.log(redundantArray);
 
     // redundant, lack
     // required, optional
@@ -212,7 +221,10 @@ function typeofValue(value) {
 
 
 
-var result = objectKeyDetect({}, {
+var result = objectKeyDetect({
+    happy: 'happy',
+    key1: '1111'
+}, {
     required: [null, 1231, 123],
-    optional: ['asdf', '9iki']
+    optional: ['key1', 'key2']
 });
