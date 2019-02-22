@@ -56,6 +56,8 @@ function objectKeyDetect(object, setting) {
         requiredArray = singleTypeMap(setting.required, 'array').status ? setting.required : [],
         optionalArray = singleTypeMap(setting.optional, 'array').status ? setting.optional : [],
         allNeededArray = [].concat(requiredArray).concat(optionalArray),
+
+        // 用來檢查物件的基本使用方式
         alertArray = allNeededArray.reduce(function(alertArray, key) {
             if (typeof key !== 'string') {
                 alertArray.push('請使用字串作為物件的key, 當前的型別為' + typeofValue(key));
@@ -66,6 +68,8 @@ function objectKeyDetect(object, setting) {
             }
             return alertArray;
         }, []),
+
+        // 用來檢查是否有多餘的key
         redundantArray = allNeededArray.reduce(function(leftKeys, keyNeeded) {
             var keyNeededIndex = leftKeys.indexOf(keyNeeded);
             if (keyNeededIndex !== -1) {
@@ -73,6 +77,8 @@ function objectKeyDetect(object, setting) {
             }
             return leftKeys;
         }, objectKeys.slice()),
+
+        // 用來檢查是否有缺乏什麼required
         lackArray = objectKeys.reduce(function(requiredArray, key) {
             var requiredKeyIndex = requiredArray.indexOf(key);
             if (key !== -1) {
