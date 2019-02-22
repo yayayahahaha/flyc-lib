@@ -46,6 +46,18 @@ function typeDetectWithDefaultValue(value, types) {
     }
 }
 
+// object 的物件key 值檢測
+function objectKeyDetect(object, setting) {
+    setting = singleTypeMap(setting, 'object').status ? setting : {};
+    var requiredArray = singleTypeMap(setting.required, 'array').status ? setting.required : [],
+        optionalArray = singleTypeMap(setting.optional, 'array').status ? setting.optional : [];
+    console.log(requiredArray);
+    console.log(optionalArray);
+
+    // redundant, lack
+    // required, optional
+}
+
 // 傳入的參數可接受多種type
 function multipleTypeMap(value, types) {
     if (!(types instanceof Array)) {
@@ -186,10 +198,4 @@ function typeofValue(value) {
     }
 }
 
-// var result = multipleTypeMap(123, ['string', 'object', 'array', 'null']);
-var result = typeDetectWithDefaultValue([], 'null');
-// var result2 = typeDetectWithDefaultValue([], ['123', 'object', 'number']);
-// var result3 = typeDetectWithDefaultValue([], 'array');
-console.log(result);
-// console.log(result2);
-// console.log(result3);
+var result = objectKeyDetect({}, {required: {}});
