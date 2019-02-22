@@ -24,11 +24,13 @@ var typeList = ['string',
         'array'
     ],
     typeListString = typeList.join(', ');
+
 function typeDetectWithDefaultValue(value, types) {
     var typesType = typeofValue(types),
-        typesDetect = multipleTypeMap(types, ['array', 'string']).status;
+        typesDetect = multipleTypeMap(types, ['array', 'string', 'object']).status;
+
     if (!typesDetect) {
-        console.log('參數錯誤: 第二個參數types 的格式僅接受字串或陣列');
+        console.log('參數錯誤: 第二個參數types 的格式僅接受字串, 陣列或物件');
         return;
     }
     switch (typesType) {
@@ -37,8 +39,9 @@ function typeDetectWithDefaultValue(value, types) {
                 console.log('參數錯誤: 第二個參數types 如是字串，僅接受' + typeListString);
             }
             break;
+        case 'object':
+            break;
         case 'array':
-        default:
             break;
     }
 }
