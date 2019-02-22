@@ -102,36 +102,9 @@ function singleTypeMap(value, type) {
                 showType = typeof value;
                 errorMessage = _createErrorMessage(type, showType);
             } else {
-                switch (type) {
-                    case 'null':
-                        if (value) {
-                            // 錯誤訊息
-                            showType = value instanceof Array ? 'array' : 'object';
-                            errorMessage = _createErrorMessage(type, showType);
-                        }
-                        break;
-                    case 'object':
-                        if (!value) {
-                            // 錯誤訊息
-                            showType = 'null';
-                            errorMessage = _createErrorMessage(type, showType);
-                        } else if (value instanceof Array) {
-                            // 錯誤訊息
-                            showType = 'array';
-                            errorMessage = _createErrorMessage(type, showType);
-                        }
-                        break;
-                    case 'array':
-                        if (!value) {
-                            // 錯誤訊息
-                            showType = 'null';
-                            errorMessage = _createErrorMessage(type, showType);
-                        } else if (!(value instanceof Array)) {
-                            // 錯誤訊息
-                            showType = 'object';
-                            errorMessage = _createErrorMessage(type, showType);
-                        }
-                        break;
+                showType = typeofValue(value);
+                if (showType !== type) {
+                    errorMessage = _createErrorMessage(type, showType);
                 }
             }
 
@@ -176,7 +149,7 @@ function typeofValue(value) {
         case 'object':
             if (!value) {
                 return 'null';
-            } else if (!(value instanceof Array)) {
+            } else if (value instanceof Array) {
                 return 'array';
             } else {
                 return 'object';
@@ -191,5 +164,10 @@ function typeofValue(value) {
     }
 }
 
-var result = multipleTypeMap(null, ['string', 'array', 'array', 'null']);
+// var result = multipleTypeMap(123, ['string', 'object', 'array', 'null']);
+var result = singleTypeMap([], 'object');
+var result2 = singleTypeMap([], 'null');
+var result3 = singleTypeMap([], 'array');
 console.log(result);
+console.log(result2);
+console.log(result3);
