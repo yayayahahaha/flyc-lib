@@ -22,13 +22,25 @@ var typeList = ['string',
         'null',
         'object',
         'array'
-    ];
+    ],
+    typeListString = typeList.join(', ');
 function typeDetectWithDefaultValue(value, types) {
-    var typesDetect = multipleTypeMap(types, ['array', 'string']).status;
+    var typesType = typeofValue(types),
+        typesDetect = multipleTypeMap(types, ['array', 'string']).status;
     if (!typesDetect) {
         console.log('參數錯誤: 第二個參數types 的格式僅接受字串或陣列');
         return;
-    };
+    }
+    switch (typesType) {
+        case 'string':
+            if (typeList.indexOf(types) === -1) {
+                console.log('參數錯誤: 第二個參數types 如是字串，僅接受' + typeListString);
+            }
+            break;
+        case 'array':
+        default:
+            break;
+    }
 }
 
 // 傳入的參數可接受多種type
@@ -172,9 +184,9 @@ function typeofValue(value) {
 }
 
 // var result = multipleTypeMap(123, ['string', 'object', 'array', 'null']);
-var result = typeDetectWithDefaultValue([], 123);
-var result2 = typeDetectWithDefaultValue([], ['123', 'object', 'number']);
+var result = typeDetectWithDefaultValue([], 'null');
+// var result2 = typeDetectWithDefaultValue([], ['123', 'object', 'number']);
 // var result3 = typeDetectWithDefaultValue([], 'array');
 console.log(result);
-console.log(result2);
+// console.log(result2);
 // console.log(result3);
