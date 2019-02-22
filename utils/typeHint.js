@@ -23,7 +23,8 @@ var typeList = ['string',
         'object',
         'array'
     ],
-    typeListString = typeList.join(', ');
+    typeListString = typeList.join(', '),
+    numberRegex = /^\d+$/;
 
 function typeDetectWithDefaultValue(value, types) {
     var typesType = typeofValue(types),
@@ -50,9 +51,18 @@ function typeDetectWithDefaultValue(value, types) {
 function objectKeyDetect(object, setting) {
     setting = singleTypeMap(setting, 'object').status ? setting : {};
     var requiredArray = singleTypeMap(setting.required, 'array').status ? setting.required : [],
-        optionalArray = singleTypeMap(setting.optional, 'array').status ? setting.optional : [];
-    console.log(requiredArray);
-    console.log(optionalArray);
+        optionalArray = singleTypeMap(setting.optional, 'array').status ? setting.optional : [],
+        allNeededArray = [].concat(requiredArray).concat(optionalArray);
+
+    allNeededArray.forEach(function(key) {
+        if (typeof key !== 'string') {
+            console.log('警告: 請使用字串作為物件的key ' + typeofValue(key));
+        } else if (numberRegex.test(key)) {
+            console.log('警告: 避免使用數字字串作為物件的key ' + key);
+        } else if (key === '') {
+            console.log('警告: 避免使用空字串作為物件的key ' + key);
+        }
+    });
 
     // redundant, lack
     // required, optional
@@ -198,4 +208,9 @@ function typeofValue(value) {
     }
 }
 
-var result = objectKeyDetect({}, {required: {}});
+
+
+var result = objectKeyDetect({}, {
+    required: [null, 1231, 123],
+    optional: ['asdf', '9iki']
+});
