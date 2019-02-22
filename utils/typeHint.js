@@ -50,6 +50,8 @@ function typeDetectWithDefaultValue(value, types) {
 // object 的物件key 值檢測
 function objectKeyDetect(object, setting) {
     setting = singleTypeMap(setting, 'object').status ? setting : {};
+    object = singleTypeMap(object, 'object').status ? object : {};
+
     var objectKeys = Object.keys(object),
         requiredArray = singleTypeMap(setting.required, 'array').status ? setting.required : [],
         optionalArray = singleTypeMap(setting.optional, 'array').status ? setting.optional : [],
