@@ -26,6 +26,21 @@ var typeList = ['string',
     showType = '',
     errorMessage = '';
 
+// 傳入的參數可接受多種type
+function multipleTypeMap(value, types) {
+    if (!(types instanceof Array)) {
+        console.log('第二個參數types 僅可接受陣列格式');
+        return;
+    }
+
+    types.forEach(function(acceptType) {
+        var result = singleTypeMap(value, acceptType);
+        console.log(result);
+    });
+
+}
+
+// 傳入的參數僅可接受一種type
 function singleTypeMap(value, type) {
     if (typeof type !== 'string') {
         return {
@@ -123,5 +138,5 @@ function singleTypeMap(value, type) {
     }
 }
 
-var result = singleTypeMap({}, 'array');
+var result = multipleTypeMap({}, ['array']);
 console.log(result);
