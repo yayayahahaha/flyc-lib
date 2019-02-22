@@ -113,10 +113,15 @@ function singleTypeMap(value, type) {
                 message: '第二個參數 type 值僅可為' + typeList.join(', ') + ', 目前的值為' + type + ', 將回傳失敗訊息'
             };
     }
+
+    return {
+        status: 1,
+        message: 'success'
+    }
     function _createErrorMessage(acceptType, getType) {
         return '格式錯誤，希望的格式是' + acceptType + ', 傳入的是' + getType;
     }
 }
 
-var result = singleTypeMap({}, 'string');
+var result = singleTypeMap({}, 'array');
 console.log(result);
