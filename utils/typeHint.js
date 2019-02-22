@@ -33,10 +33,12 @@ function multipleTypeMap(value, types) {
         return;
     }
 
-    types.forEach(function(acceptType) {
-        var result = singleTypeMap(value, acceptType);
-        console.log(result);
-    });
+    var resultsArray = [];
+    types.reduce(function(resultsArray, acceptType) {
+        resultsArray.push(singleTypeMap(value, acceptType));
+        return resultsArray;
+    }, resultsArray);
+    console.log(resultsArray);
 
 }
 
@@ -138,5 +140,5 @@ function singleTypeMap(value, type) {
     }
 }
 
-var result = multipleTypeMap({}, ['array']);
+var result = multipleTypeMap({}, ['array', 'array', 'string', 'object']);
 console.log(result);
