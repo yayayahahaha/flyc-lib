@@ -31,11 +31,26 @@ function multipleTypeMap(value, types) {
         return;
     }
 
-    [].forEach.call(types, function(item, index) {
-        console.log(item);
-        console.log(singleTypeMap(value, item));
-    });
+    var status = 0,
+        message = '',
+        showType = typeofValue(value),
+        match = types.reduce(function(resultsArray, type) {
+        resultsArray.push(singleTypeMap(value, type))
+        return resultsArray;
+    }, []).reduce(function(match, result) {
+        return match || !!result.status;
+    }, false);
 
+    status = match ? 1 : 0;
+    message = match ? 'success' : '格式錯誤，希望的格式是 ' + types.join(', ') + ', 傳進來的是: ' + showType;
+    return {
+        status: status,
+        message: message,
+        meta: {
+            value: value,
+            types: types
+        }
+    };
 }
 
 // 傳入的參數僅可接受一種type
@@ -176,5 +191,5 @@ function typeofValue(value) {
     }
 }
 
-var result = multipleTypeMap(123, ['string', 'array', 'array', 'object']);
+var result = multipleTypeMap(null, ['string', 'array', 'array', 'null']);
 console.log(result);
