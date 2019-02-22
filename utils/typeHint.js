@@ -42,7 +42,16 @@ function singleTypeMap(value, type) {
             if (typeof value !== type) {
                 // 錯誤訊息
                 showType = typeof value;
-                errorMessage = 'something error message';
+
+                if (showType === 'object') {
+                    showType = !value
+                        ? 'null'
+                        : value instanceof Array
+                            ? 'array'
+                            : 'object';
+                }
+
+                errorMessage = _createErrorMessage(type, showType);
                 return {
                     status: 0,
                     message: errorMessage
@@ -53,35 +62,39 @@ function singleTypeMap(value, type) {
         case 'null':
         case 'object':
         case 'array':
-            if (typeof value !== 'object') {} else {
+            if (typeof value !== 'object') {
+                // 錯誤訊息
+                showType = typeof value;
+                errorMessage = _createErrorMessage(type, showType);
+            } else {
                 switch (type) {
                     case 'null':
                         if (value) {
                             // 錯誤訊息
                             showType = value instanceof Array ? 'array' : 'object';
-                            errorMessage = 'something error message';
+                            errorMessage = _createErrorMessage(type, showType);
                         }
                         break;
                     case 'object':
                         if (!value) {
                             // 錯誤訊息
                             showType = 'null';
-                            errorMessage = 'something error message';
+                            errorMessage = _createErrorMessage(type, showType);
                         } else if (value instanceof Array) {
                             // 錯誤訊息
                             showType = 'array';
-                            errorMessage = 'something error message';
+                            errorMessage = _createErrorMessage(type, showType);
                         }
                         break;
                     case 'array':
                         if (!value) {
                             // 錯誤訊息
                             showType = 'null';
-                            errorMessage = 'something error message';
+                            errorMessage = _createErrorMessage(type, showType);
                         } else if (!(value instanceof Array)) {
                             // 錯誤訊息
                             showType = 'object';
-                            errorMessage = 'something error message';
+                            errorMessage = _createErrorMessage(type, showType);
                         }
                         break;
                 }
@@ -100,7 +113,10 @@ function singleTypeMap(value, type) {
                 message: '第二個參數 type 值僅可為' + typeList.join(', ') + ', 目前的值為' + type + ', 將回傳失敗訊息'
             };
     }
+    function _createErrorMessage(acceptType, getType) {
+        return '格式錯誤，希望的格式是' + acceptType + ', 傳入的是' + getType;
+    }
 }
 
-var result = singleTypeMap('value', 'number');
+var result = singleTypeMap({}, 'string');
 console.log(result);
