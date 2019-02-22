@@ -58,11 +58,11 @@ function objectKeyDetect(object, setting) {
         allNeededArray = [].concat(requiredArray).concat(optionalArray),
         alertArray = allNeededArray.reduce(function(alertArray, key) {
             if (typeof key !== 'string') {
-                alertArray.push('請使用字串作為物件的key ' + typeofValue(key));
+                alertArray.push('請使用字串作為物件的key, 當前的型別為' + typeofValue(key));
             } else if (numberRegex.test(key)) {
-                alertArray.push('避免使用數字字串作為物件的key ' + key);
+                alertArray.push('避免使用數字字串作為物件的key, 當前的值為' + key);
             } else if (key === '') {
-                alertArray.push('避免使用空字串作為物件的key ' + key);
+                alertArray.push('避免使用空字串作為物件的key, 當前的值為' + key);
             }
             return alertArray;
         }, []),
@@ -72,10 +72,18 @@ function objectKeyDetect(object, setting) {
                 leftKeys.splice(keyNeededIndex, 1);
             }
             return leftKeys;
-        }, objectKeys.slice());
+        }, objectKeys.slice()),
+        lackArray = objectKeys.reduce(function(requiredArray, key) {
+            var requiredKeyIndex = requiredArray.indexOf(key);
+            if (key !== -1) {
+                requiredArray.splice(requiredKeyIndex, 1);
+            }
+            return requiredArray;
+        }, requiredArray.slice());
 
-    console.log(alertArray);
-    console.log(redundantArray);
+    console.log('alertArray: ', alertArray);
+    console.log('redundantArray: ', redundantArray);
+    console.log('lackArray: ', lackArray);
 
     // redundant, lack
     // required, optional
@@ -227,6 +235,6 @@ var result = objectKeyDetect({
     happy: 'happy',
     key1: '1111'
 }, {
-    required: [null, 1231, 123],
+    required: [null, '1231', '123'],
     optional: ['key1', 'key2']
 });
