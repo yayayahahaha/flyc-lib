@@ -155,5 +155,26 @@ function singleTypeMap(value, type) {
     }
 }
 
-var result = multipleTypeMap('123', ['string', 'array', 'array', 'object']);
+// 主要用來區分null, array 和object
+function typeofValue(value) {
+    switch (typeof value) {
+        case 'object':
+            if (!value) {
+                return 'null';
+            } else if (!(value instanceof Array)) {
+                return 'array';
+            } else {
+                return 'object';
+            }
+        default:
+        // case 'string':
+        // case 'number':
+        // case 'boolean':
+        // case 'function':
+        // case 'undefined':
+            return typeof value;
+    }
+}
+
+var result = multipleTypeMap(123, ['string', 'array', 'array', 'object']);
 console.log(result);
