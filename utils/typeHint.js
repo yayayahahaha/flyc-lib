@@ -34,12 +34,13 @@ function typeDetectWithDefaultValue(value, types) {
         console.log('參數錯誤: 第二個參數types 的格式僅接受字串, 陣列或物件');
         return;
     }
+    // 不論是陣列還是字串還是物件，都整理成格式正確的物件陣列後再繼續執行
     switch (typesType) {
         case 'string':
             // 代表沒有設定回傳值、所以直接用singleTypeMap 就好
             return singleTypeMap(value, types);
         case 'object':
-            var objectTypePass = objectKeyDetect(types, { required: ['type', 'default'] });
+            var objectTypePass = objectKeyDetect(types, { required: ['type'], optional: ['default'] });
             console.log(objectTypePass);
             break;
         case 'array':
@@ -243,6 +244,6 @@ function typeofValue(value) {
 
 
 
-var result = typeDetectWithDefaultValue('hello', 'number');
+var result = typeDetectWithDefaultValue('hello', {setting: 'key'});
 
 console.log(result);
