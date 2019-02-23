@@ -92,10 +92,6 @@ function objectKeyDetect(object, setting) {
         noLack = lackArray.length === 0,
         status = noAlert && noRedundant && noLack;
 
-    console.log('alertArray: ', alertArray);
-    console.log('redundantArray: ', redundantArray);
-    console.log('lackArray: ', lackArray);
-
     return {
         status: status,
         alert: alertArray,
