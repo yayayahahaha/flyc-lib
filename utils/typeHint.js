@@ -36,11 +36,11 @@ function typeDetectWithDefaultValue(value, types) {
     }
     switch (typesType) {
         case 'string':
-            if (typeList.indexOf(types) === -1) {
-                console.log('參數錯誤: 第二個參數types 如是字串，僅接受' + typeListString);
-            }
-            break;
+            // 代表沒有設定回傳值、所以直接用singleTypeMap 就好
+            return singleTypeMap(value, types);
         case 'object':
+            var objectTypePass = objectKeyDetect(types, { required: ['type', 'default'] });
+            console.log(objectTypePass);
             break;
         case 'array':
             break;
@@ -243,13 +243,6 @@ function typeofValue(value) {
 
 
 
-var result = objectKeyDetect({
-    happy: 'happy',
-    key1: '1111',
-    another: 'redundant'
-}, {
-    required: ['happy'],
-    optional: ['key1', 'key2']
-});
+var result = typeDetectWithDefaultValue('hello', 'number');
 
 console.log(result);
