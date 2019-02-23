@@ -87,12 +87,22 @@ function objectKeyDetect(object, setting) {
             return requiredArray;
         }, requiredArray.slice());
 
+    var noAlert = alertArray.length === 0,
+        noRedundant = redundantArray.length === 0,
+        noLack = lackArray.length === 0,
+        status = noAlert && noRedundant && noLack;
+
     console.log('alertArray: ', alertArray);
     console.log('redundantArray: ', redundantArray);
     console.log('lackArray: ', lackArray);
 
-    // redundant, lack
-    // required, optional
+    return {
+        status: status,
+        alert: alertArray,
+        redundant: redundantArray,
+        lack: lackArray,
+        message: status ? 'success' : '請檢查alert, redundant 和lack 查閱相關訊息'
+    };
 }
 
 // 傳入的參數可接受多種type
@@ -239,8 +249,11 @@ function typeofValue(value) {
 
 var result = objectKeyDetect({
     happy: 'happy',
-    key1: '1111'
+    key1: '1111',
+    another: 'redundant'
 }, {
-    required: [null, '1231', '123'],
+    required: ['happy'],
     optional: ['key1', 'key2']
 });
+
+console.log(result);
