@@ -29,7 +29,7 @@ var typeList = ['string',
 function typeDetectWithDefaultValue(value, types) {
     var typesType = typeofValue(types),
         typesDetect = multipleTypeMap(types, ['array', 'string', 'object']).status;
-        typeObjectArray = [];
+    typeObjectArray = [];
 
     if (!typesDetect) {
         console.log('參數錯誤: 第二個參數types 的格式僅接受字串, 陣列或物件');
@@ -38,14 +38,18 @@ function typeDetectWithDefaultValue(value, types) {
     // 不論是陣列還是字串還是物件，都整理成格式正確的物件陣列後再繼續執行
     switch (typesType) {
         case 'string':
-        typeObjectArray.push({
-            type: types
-            // 沒有default 值
-        });
+            typeObjectArray.push({
+                type: types
+                // 沒有default 值
+            });
 
         case 'object':
-            var objectTypePass = objectKeyDetect(types, { required: ['type'], optional: ['default'] }),
+            var objectTypePass = objectKeyDetect(types, {
+                    required: ['type'],
+                    optional: ['default']
+                }),
                 objectErrorMessage = '';
+
             if (!objectTypePass.status) {
                 objectErrorMessage = '如果第二個參數是物件的話，只能有有必填的type 和選填的default. ' + JSON.stringify(types)
                 return {
@@ -53,7 +57,7 @@ function typeDetectWithDefaultValue(value, types) {
                     message: objectErrorMessage
                 };
             }
-                typeObjectArray.push(types);
+            typeObjectArray.push(types);
             console.log(typeObjectArray);
             break;
         case 'array':
@@ -126,11 +130,11 @@ function multipleTypeMap(value, types) {
         message = '',
         showType = typeofValue(value),
         match = types.reduce(function(resultsArray, type) {
-        resultsArray.push(singleTypeMap(value, type))
-        return resultsArray;
-    }, []).reduce(function(match, result) {
-        return match || !!result.status;
-    }, false);
+            resultsArray.push(singleTypeMap(value, type))
+            return resultsArray;
+        }, []).reduce(function(match, result) {
+            return match || !!result.status;
+        }, false);
 
     status = match ? 1 : 0;
     message = match ? 'success' : '格式錯誤，希望的格式是 ' + types.join(', ') + ', 傳進來的是: ' + showType;
@@ -166,11 +170,11 @@ function singleTypeMap(value, type) {
                 showType = typeof value;
 
                 if (showType === 'object') {
-                    showType = !value
-                        ? 'null'
-                        : value instanceof Array
-                            ? 'array'
-                            : 'object';
+                    showType = !value ?
+                        'null' :
+                        value instanceof Array ?
+                        'array' :
+                        'object';
                 }
 
                 errorMessage = _createErrorMessage(type, showType);
@@ -229,6 +233,7 @@ function singleTypeMap(value, type) {
             type: type
         }
     }
+
     function _createErrorMessage(acceptType, getType) {
         return '格式錯誤，希望的格式是' + acceptType + ', 傳入的是' + getType;
     }
@@ -246,17 +251,19 @@ function typeofValue(value) {
                 return 'object';
             }
         default:
-        // case 'string':
-        // case 'number':
-        // case 'boolean':
-        // case 'function':
-        // case 'undefined':
+            // case 'string':
+            // case 'number':
+            // case 'boolean':
+            // case 'function':
+            // case 'undefined':
             return typeof value;
     }
 }
 
 
 
-var result = typeDetectWithDefaultValue('hello', {setting: 'key'});
+var result = typeDetectWithDefaultValue('hello', {
+    setting: 'key'
+});
 
 console.log(result);
