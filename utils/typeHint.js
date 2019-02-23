@@ -94,7 +94,7 @@ function objectKeyDetect(object, setting) {
         status = noAlert && noRedundant && noLack;
 
     return {
-        status: status,
+        status: status ? 1 : 0,
         alert: alertArray,
         redundant: redundantArray,
         lack: lackArray,
