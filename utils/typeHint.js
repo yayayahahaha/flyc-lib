@@ -29,6 +29,7 @@ var typeList = ['string',
 function typeDetectWithDefaultValue(value, types) {
     var typesType = typeofValue(types),
         typesDetect = multipleTypeMap(types, ['array', 'string', 'object']).status;
+        typeObjectArray = [];
 
     if (!typesDetect) {
         console.log('參數錯誤: 第二個參數types 的格式僅接受字串, 陣列或物件');
@@ -37,11 +38,23 @@ function typeDetectWithDefaultValue(value, types) {
     // 不論是陣列還是字串還是物件，都整理成格式正確的物件陣列後再繼續執行
     switch (typesType) {
         case 'string':
-            // 代表沒有設定回傳值、所以直接用singleTypeMap 就好
-            return singleTypeMap(value, types);
+        typeObjectArray.push({
+            type: types
+            // 沒有default 值
+        });
+
         case 'object':
-            var objectTypePass = objectKeyDetect(types, { required: ['type'], optional: ['default'] });
-            console.log(objectTypePass);
+            var objectTypePass = objectKeyDetect(types, { required: ['type'], optional: ['default'] }),
+                objectErrorMessage = '';
+            if (!objectTypePass.status) {
+                objectErrorMessage = '如果第二個參數是物件的話，只能有有必填的type 和選填的default. ' + JSON.stringify(types)
+                return {
+                    status: 0,
+                    message: objectErrorMessage
+                };
+            }
+                typeObjectArray.push(types);
+            console.log(typeObjectArray);
             break;
         case 'array':
             break;
