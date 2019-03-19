@@ -68,6 +68,7 @@ function TaskSystem(
     setting = {
         eachCallback: Function.prototype,
         callback: Function.prototype,
+        timeout: 1000,
         randomDelay: 2000
     }) {
 
@@ -90,12 +91,25 @@ function TaskSystem(
 
     this.setting = {
         randomDelay: 2000,
+        timeout: 30000,
         eachCallback: Function.prototype,
         callback: Function.prototype
     };
     Object.keys(this.setting).forEach((settingKey) => {
         switch (settingKey) {
-            // 隨機延遲，用於假裝人性化
+            // 發出請求幾毫秒後，重新嘗試
+            case 'timeout':
+                var timeoutMilSec = setting[settingKey];
+                this.setting.timeout = typeof timeoutMilSec === 'number' ?
+                    timeoutMilSec >= 0 ?
+                    timeoutMilSec :
+                    (function() {
+                        console.log('timeout 設定參數不接受負數, 將使用30000 ms');
+                        return 30000;
+                    })() :
+                    30000;
+
+                // 隨機延遲，用於假裝人性化
             case 'randomDelay':
                 var randomDelay = setting[settingKey];
                 this.setting.randomDelay = typeof randomDelay === 'number' ?
