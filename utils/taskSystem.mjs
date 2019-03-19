@@ -183,13 +183,25 @@ function TaskSystem(
         // 從任務列表裡取出任務
         job = this.jobsArray.splice(0, 1)[0];
 
+        // 用來作timeout 檢測的racer
+        var racer = new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                resolve({
+                    status: 0,
+                    data: 'TaskSystem: timeout',
+                    meta: job
+                });
+            // }, this.setting.timeout);
+            }, 10000);
+        });
+
         // 判斷取出的任務是function 還是純粹的值
         // 如果是值，這裡目前沒做Object 或Array 的深度複製
         jobReault = typeof job === 'function' ? job() : job;
 
         // 這裡的catch 得要外面的Promise 用throw 丟值過來才會被觸發
         // 有點小麻煩就是了
-        jobReault = await Promise.resolve(jobReault).then((result) => {
+        jobReault = await Promise.race([racer, Promise.resolve(jobReault).then((result) => {
             return {
                 status: 1,
                 data: result,
@@ -201,7 +213,7 @@ function TaskSystem(
                 data: error,
                 meta: job
             }
-        });
+        })]);
 
         // 秀給console 的文字
         this.finishedJobs++;
@@ -218,6 +230,10 @@ function TaskSystem(
 
         this.eachCallback(jobReault);
         this.resultArray.push(jobReault);
+
+        if (jobReault.status === 0 && jobReault.data === 'TaskSystem: timeout') {
+            console.log('timeout!');
+        }
 
         // 延遲模擬人類的地方
         setTimeout(() => {
