@@ -219,6 +219,7 @@ function TaskSystem(
         this.eachCallback(jobReault);
         this.resultArray.push(jobReault);
 
+        // 延遲模擬人類的地方
         setTimeout(() => {
             this._doJobs(resolve);
         }, Math.round(Math.random() * this.setting.randomDelay));
