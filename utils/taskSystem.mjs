@@ -68,7 +68,7 @@ function TaskSystem(
     setting = {
         eachCallback: Function.prototype,
         callback: Function.prototype,
-        timeout: 1000,
+        timeout: 30000,
         randomDelay: 2000
     }) {
 
@@ -215,8 +215,17 @@ function TaskSystem(
             }
         })]);
 
+        // timeout 了
+        if (jobReault.system_code === 504) {
+            console.log('');
+            console.log('連線逾時，重新嘗試..');
+            this.jobsArray.push(job);
+        } else {
+            // 秀給console 的文字
+            this.finishedJobs++;
+        }
+
         // 秀給console 的文字
-        this.finishedJobs++;
         var status = jobReault.status ? 'success' : 'failed',
             of = `${ this.finishedJobs } / ${ this.totalJobsNumber }`,
             persent = parseInt(this.finishedJobs, 10) * 100 / parseInt(this.totalJobsNumber, 10);
@@ -230,14 +239,6 @@ function TaskSystem(
 
         this.eachCallback(jobReault);
         this.resultArray.push(jobReault);
-
-        // timeout 了
-        if (jobReault.system_code === 504) {
-            console.log('');
-            console.log('連線逾時，重新嘗試..');
-            this.jobsArray.push(job);
-            this.totalJobsNumber = this.jobsArray.length; // 總任務數量
-        }
 
         // 延遲模擬人類的地方
         setTimeout(() => {
