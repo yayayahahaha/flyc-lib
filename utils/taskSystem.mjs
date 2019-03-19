@@ -184,15 +184,15 @@ function TaskSystem(
         job = this.jobsArray.splice(0, 1)[0];
 
         // 用來作timeout 檢測的racer
-        var racer = new Promise(function(resolve, reject) {
-            setTimeout(function() {
+        var racer = new Promise((resolve, reject) => {
+            setTimeout(() => {
                 resolve({
                     status: 0,
                     data: 'TaskSystem: timeout',
+                    system_code: 504,
                     meta: job
                 });
-            // }, this.setting.timeout);
-            }, 10000);
+            }, this.setting.timeout);
         });
 
         // 判斷取出的任務是function 還是純粹的值
@@ -231,8 +231,12 @@ function TaskSystem(
         this.eachCallback(jobReault);
         this.resultArray.push(jobReault);
 
-        if (jobReault.status === 0 && jobReault.data === 'TaskSystem: timeout') {
-            console.log('timeout!');
+        // timeout 了
+        if (jobReault.system_code === 504) {
+            console.log('');
+            console.log('連線逾時，重新嘗試..');
+            this.jobsArray.push(job);
+            this.totalJobsNumber = this.jobsArray.length; // 總任務數量
         }
 
         // 延遲模擬人類的地方
