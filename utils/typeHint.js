@@ -28,8 +28,8 @@ var typeList = ['string',
 
 function typeDetectWithDefaultValue(value, types) {
     var typesType = typeofValue(types),
-        typesDetect = multipleTypeMap(types, ['array', 'string', 'object']).status;
-    typeObjectArray = [];
+        typesDetect = multipleTypeMap(types, ['array', 'string', 'object']).status,
+        typeObjectArray = [];
 
     if (!typesDetect) {
         console.log('參數錯誤: 第二個參數types 的格式僅接受字串, 陣列或物件');
@@ -58,9 +58,23 @@ function typeDetectWithDefaultValue(value, types) {
                 };
             }
             typeObjectArray.push(types);
-            console.log(typeObjectArray);
             break;
         case 'array':
+            var resultsArray = types.reduce(function(resultsArray, type) {
+                var objectArrayPassArray = [];
+
+                if (typeofValue(type) === 'string') {
+                    typeObjectArray.push({
+                        type: types
+                        // 沒有default 值
+                    });
+                } else if (typeofValue(type) === 'object') {
+                    type
+                }
+
+                return resultsArray;
+            }, []);
+            console.log(resultsArray);
             break;
     }
 }
@@ -262,8 +276,9 @@ function typeofValue(value) {
 
 
 
-var result = typeDetectWithDefaultValue('hello', {
-    setting: 'key'
-});
+var result = typeDetectWithDefaultValue('hello', [{
+    type: 'typeof_input_value',
+    default: 'hello-hello-hello'
+}, 'hello', 123]);
 
 console.log(result);
